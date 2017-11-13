@@ -13,10 +13,10 @@ import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 
 /**
- *
- * @author Vladimir
+ * Class containing set of methods used for database handling
+ * @author Vladimir Danilov
  */
-public class Utility {
+public final class Utility {
     
     // Database connection details
     private static final String DBURL = "jdbc:postgresql://localhost:2009/meowker";
@@ -29,6 +29,11 @@ public class Utility {
 	return connection;
     }
     
+    /**
+     * Retrieves current current user or null if no session
+     * @param request Servlet request
+     * @return <code>User</code> object of current session or null if there is no session
+     */
     public static User getSession(HttpServletRequest request) {
 	Cookie[] cookies = request.getCookies();
 	Cookie session = null;
@@ -48,6 +53,11 @@ public class Utility {
 	}
     }
     
+    /**
+     * Creates new user session
+     * @param response servlet response
+     * @param user <code>User</code> object of current user
+     */
     public static void createSession(HttpServletResponse response, User user){
 	Cookie session = new Cookie("session", user.getLogin());
 	session.setHttpOnly(true);
@@ -55,17 +65,32 @@ public class Utility {
 	response.addCookie(session);
     }
     
-    public static void destroySession(HttpServletResponse response, User user){
+    /**
+     * Destroys existing user session
+     * @param response servlet response
+     * @param user
+     */
+    public static void destroySession(HttpServletResponse response, User user){ // TODO remove user arg
 	Cookie session = new Cookie("session", "expired");
 	session.setHttpOnly(true);
 	session.setMaxAge(0);
 	response.addCookie(session);
     }
     
+    /**
+     * Extends existing user session
+     * @param response servlet response
+     * @param user <code>User</code> object
+     */
     public static void extendSession(HttpServletResponse response, User user){
 	createSession(response, user);
     }
     
+    /**
+     * Retrieves <code>User</code> object from the database, if it exists
+     * @param login login of the user
+     * @return <code>User</code> object or null
+     */
     public static User getUser(String login){
 	User user = null;
 	try{
@@ -86,6 +111,12 @@ public class Utility {
 	return user;
     }
     
+    /**
+     * Retrieves <code>User</code> object from the database, if it exists and credentials are valid
+     * @param login login
+     * @param password password
+     * @return <code>User</code> object or null
+     */
     public static User getUser(String login, String password){
 	User user = null;
 	try{
@@ -106,6 +137,12 @@ public class Utility {
 	return user;
     }
     
+    /**
+     * Adds a new user in the database
+     * @param login login
+     * @param password password
+     * @param fullname fullname
+     */
     public static void registerUser(String login, String password, String fullname){
 	try{
 	    Connection conn = getConnection();
@@ -119,6 +156,11 @@ public class Utility {
 	}
     }
     
+    /**
+     * Check if there is no such login in the database
+     * @param login login
+     * @return true if the login is unique, otherwise false
+     */
     public static boolean isLoginUnique(String login){
 	boolean unique = true;
 	try{
@@ -158,12 +200,21 @@ public class Utility {
 	return fullName;
     }
     
+    /**
+     * Retrieves the newest posts of the user
+     * @param login login of the user
+     * @param fromid id of the post to start from
+     * @return Array of posts
+     */
     public static String[] getNewMeows(String login, String fromid){
 	String[] list = new String[0];
 	try{
 	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
 	    String sql = "SELECT * FROM meows WHERE author='"+login+"' AND id>"+fromid+" ORDER BY id ASC";
+	    if(fromid.equals("0")){
+		sql += " LIMIT 25";
+	    }
 	    ResultSet rs = stmt.executeQuery(sql);
 	    ArrayList<String> alist = new ArrayList<>();
 	    while(rs.next()){
@@ -187,6 +238,12 @@ public class Utility {
 	return list;
     }
  
+    /**
+     * Retrieves new posts of user and all users they follow
+     * @param user <code>User</code> object
+     * @param fromid id of post to start from
+     * @return Array of posts
+     */
     public static String[] getNewFeed(User user, String fromid){
 	
 	String[] feed = new String[0]; // id login fullname text\n
@@ -221,6 +278,11 @@ public class Utility {
 	
     }
     
+    /**
+     * Retrieves logins of users who followed the user passed as argument
+     * @param user <code>User</code> object
+     * @return Array of logins
+     */
     public static String[] getFollows(User user){
 	String[] list = new String[0];
 	try{
@@ -245,6 +307,11 @@ public class Utility {
 	return list;
     }
     
+    /**
+     * Adds new post to the database.
+     * @param poster User object of author
+     * @param text text of post
+     */
     public static void postMeow(User poster, String text){
 	try{
 	    Connection conn = getConnection();
@@ -257,5 +324,9 @@ public class Utility {
 	    e.printStackTrace();
 	}
     }
-    
+    /**
+     * Private default constructor prevents class from being instantiated
+     */
+    private Utility() {
+    }
 }
