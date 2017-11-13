@@ -12,17 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 
-import com.microsoft.sqlserver.jdbc.*;
-
 /**
  *
  * @author Vladimir
  */
 public class Utility {
     
-    private static final String DBURL = "jdbc:sqlserver://meowker.database.windows.net:1433;database=meowker;user=vovan@meowker;password=123455Lol;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"; //jdbc:postgresql://localhost:2009/meowker
-    //private static final String DBLOGIN = "vovan"; //netbeans
-    //private static final String DBPASSWORD = "123455Lol"; //netbeans
+    // Database connection details
+    private static final String DBURL = "jdbc:postgresql://localhost:2009/meowker";
+    private static final String DBLOGIN = "netbeans";
+    private static final String DBPASSWORD = "netbeans";
     
     public static User getSession(HttpServletRequest request) {
 	Cookie[] cookies = request.getCookies();
@@ -195,16 +194,14 @@ public class Utility {
 	    //Class.forName("org.postgresql.Driver");
 	    Connection conn = DriverManager.getConnection(DBURL);
 	    Statement stmt = conn.createStatement();
-	    String sql = "SELECT";
-	    if(fromid.equals("0")){
-		sql += " TOP 25";
-	    }
-	    sql += " * FROM meows WHERE id>"+fromid;
-	    sql += " AND (author='"+user.getLogin()+"'";
+	    String sql = "SELECT * FROM meows WHERE id>"+fromid+" AND (author='"+user.getLogin()+"'";
 	    for(String login : follows){
 		sql += " OR author='"+login+"'";
 	    }
 	    sql += ") ORDER BY id ASC";
+	    if(fromid.equals("0")){
+		sql += " LIMIT 25";
+	    }
 	    ResultSet rs = stmt.executeQuery(sql);
 	    ArrayList<String> alist = new ArrayList<>();
 	    while(rs.next()){
