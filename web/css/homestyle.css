@@ -1,0 +1,83 @@
+/* Remove the navbar's default margin-bottom and rounded borders */
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+}
+
+html, body {
+    background-color: #f5f8fa;
+}
+
+/* Set gray background color and 100% height */
+.sidenav {
+    height: 100%;
+    max-width: 307.5px;
+    min-width: 307.5px;
+}
+.mainwrapper {
+    max-width: 615px;
+}
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 990px) { /*767px*/
+    .sidenav {
+        height: auto;
+        padding: 15px;
+	min-width: 307.5px;
+    }
+    .mainwrapper {
+	max-width: 980px;
+    }
+    .row.content {
+        height: auto;
+    }
+}
+@media screen and (max-width: 990px) { /*767px*/
+    .sidenav {
+        height: auto;
+        padding: 15px;
+	margin-right: 0;
+	max-width: 980px;
+	min-width: 0;
+    }
+    .mainwrapper {
+	max-width: 980px;
+    }
+    .row.content {
+        height: auto;
+    }
+}
+
+.outterwrapper {
+    max-width: 1250px;
+    padding: 20px 0 0;
+}
+
+
+
+nav {
+    background-color: #969696;
+}
+
+.newMeowDiv {
+    padding: 8px;
+}
+
+.bg-tabby {
+    background: url(../assets/cat-spots-texture.jpg) no-repeat;
+    background-size: cover;
+    height: 120px;
+}
+
+.searchBox{
+    padding-top: 8px;
+    max-width: 200px;
+}
+
+@media screen and (max-width: 768px) {
+    .searchBox{
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 8px;
+	max-width: 750px;
+    }
+}
