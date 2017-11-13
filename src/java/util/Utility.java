@@ -23,6 +23,12 @@ public class Utility {
     private static final String DBLOGIN = "netbeans";
     private static final String DBPASSWORD = "netbeans";
     
+    private static Connection getConnection() throws ClassNotFoundException, SQLException{
+	Class.forName("org.postgresql.Driver");
+	Connection connection = DriverManager.getConnection(DBURL);
+	return connection;
+    }
+    
     public static User getSession(HttpServletRequest request) {
 	Cookie[] cookies = request.getCookies();
 	Cookie session = null;
@@ -63,8 +69,7 @@ public class Utility {
     public static User getUser(String login){
 	User user = null;
 	try{
-	    Class.forName("org.postgresql.Driver");
-	    Connection conn = DriverManager.getConnection(DBURL);
+	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
 	    String sql = "SELECT fullName FROM users WHERE login='" + login + "'";
 	    ResultSet rs = stmt.executeQuery(sql);
@@ -84,8 +89,7 @@ public class Utility {
     public static User getUser(String login, String password){
 	User user = null;
 	try{
-	    Class.forName("org.postgresql.Driver");
-	    Connection conn = DriverManager.getConnection(DBURL);
+	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
 	    String sql = "SELECT fullName FROM users WHERE login='" + login + "' AND password='" + password + "'";
 	    ResultSet rs = stmt.executeQuery(sql);
@@ -104,8 +108,7 @@ public class Utility {
     
     public static void registerUser(String login, String password, String fullname){
 	try{
-	    Class.forName("org.postgresql.Driver");
-	    Connection conn = DriverManager.getConnection(DBURL);
+	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
 	    String sql = "INSERT INTO users (login, password, fullname) VALUES ('"+login+"', '"+password+"', '"+fullname+"')";
 	    stmt.executeUpdate(sql);
@@ -119,8 +122,7 @@ public class Utility {
     public static boolean isLoginUnique(String login){
 	boolean unique = true;
 	try{
-	    Class.forName("org.postgresql.Driver");
-	    Connection conn = DriverManager.getConnection(DBURL);
+	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
 	    String sql = "SELECT login FROM users WHERE login='" + login + "'";
 	    ResultSet rs = stmt.executeQuery(sql);
@@ -140,7 +142,7 @@ public class Utility {
 	String fullName = null;
 	try{
 	    Class.forName("org.postgresql.Driver");
-	    Connection conn = DriverManager.getConnection(DBURL);
+	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
 	    String sql = "SELECT fullName FROM users WHERE login='" + login + "'";
 	    ResultSet rs = stmt.executeQuery(sql);
@@ -159,8 +161,7 @@ public class Utility {
     public static String[] getNewMeows(String login, String fromid){
 	String[] list = new String[0];
 	try{
-	    Class.forName("org.postgresql.Driver");
-	    Connection conn = DriverManager.getConnection(DBURL);
+	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
 	    String sql = "SELECT * FROM meows WHERE author='"+login+"' AND id>"+fromid+" ORDER BY id ASC";
 	    ResultSet rs = stmt.executeQuery(sql);
@@ -191,8 +192,7 @@ public class Utility {
 	String[] feed = new String[0]; // id login fullname text\n
 	String[] follows = getFollows(user);
 	try{
-	    Class.forName("org.postgresql.Driver");
-	    Connection conn = DriverManager.getConnection(DBURL);
+	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
 	    String sql = "SELECT * FROM meows WHERE id>"+fromid+" AND (author='"+user.getLogin()+"'";
 	    for(String login : follows){
@@ -224,7 +224,6 @@ public class Utility {
     public static String[] getFollows(User user){
 	String[] list = new String[0];
 	try{
-	    Class.forName("org.postgresql.Driver");
 	    Connection conn = DriverManager.getConnection(DBURL);
 	    Statement stmt = conn.createStatement();
 	    String sql = "SELECT follow FROM links WHERE follower='"+user.getLogin()+"'";
@@ -248,8 +247,7 @@ public class Utility {
     
     public static void postMeow(User poster, String text){
 	try{
-	    Class.forName("org.postgresql.Driver");
-	    Connection conn = DriverManager.getConnection(DBURL);
+	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
 	    String sql = "INSERT INTO meows (author, text) VALUES ('"+poster.getLogin()+"', '"+text+"')";
 	    stmt.executeUpdate(sql);
