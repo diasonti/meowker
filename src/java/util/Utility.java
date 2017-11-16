@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Cookie;
 import java.util.ArrayList;
+import com.google.gson.Gson;
 
 /**
  * Class containing set of methods used for database handling
@@ -206,8 +207,9 @@ public final class Utility {
      * @param fromid id of the post to start from
      * @return Array of posts
      */
-    public static String[] getNewMeows(String login, String fromid){
-	String[] list = new String[0];
+    public static String getNewMeows(String login, String fromid){
+	String json = new Gson().toJson(new Post[0]);
+	Post[] list = new Post[0];
 	try{
 	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
@@ -216,26 +218,32 @@ public final class Utility {
 		sql += " LIMIT 25";
 	    }
 	    ResultSet rs = stmt.executeQuery(sql);
-	    ArrayList<String> alist = new ArrayList<>();
+	    ArrayList<Post> alist = new ArrayList<>();
 	    while(rs.next()){
-		alist.add(rs.getString(1) + " " + rs.getString(2) + " " + getUser(rs.getString(2)).getFullName() + " " + rs.getString(3));
+		String id = rs.getString(1);
+		String postlogin = rs.getString(2);
+		String text = rs.getString(3);
+		Post p = new Post(id, postlogin, getUser(postlogin).getFullName(), text);
+		alist.add(p);
 	    }
 	    rs.close();
 	    stmt.close();
 	    conn.close();
 	    
 	    if(alist.isEmpty())
-		return list;
+		return json;
 	    
-	    list = new String[alist.size()];
+	    list = new Post[alist.size()];
 	    for(int i = 0; i < alist.size(); i++){
 		list[i] = alist.get(i);
 	    }
 	    
+	    json = new Gson().toJson(list);
+	    
 	}catch(Exception e){
 	    e.printStackTrace();
 	}
-	return list;
+	return json;
     }
  
     /**
@@ -244,9 +252,9 @@ public final class Utility {
      * @param fromid id of post to start from
      * @return Array of posts
      */
-    public static String[] getNewFeed(User user, String fromid){
-	
-	String[] feed = new String[0]; // id login fullname text\n
+    public static String getNewFeed(User user, String fromid){
+	String json = new Gson().toJson(new Post[0]);
+	Post[] feed;
 	String[] follows = getFollows(user);
 	try{
 	    Connection conn = getConnection();
@@ -260,21 +268,27 @@ public final class Utility {
 		sql += " LIMIT 25";
 	    }
 	    ResultSet rs = stmt.executeQuery(sql);
-	    ArrayList<String> alist = new ArrayList<>();
+	    ArrayList<Post> alist = new ArrayList<>();
 	    while(rs.next()){
-		alist.add(rs.getString(1) + " " + rs.getString(2) + " " + getUser(rs.getString(2)).getFullName() + " " + rs.getString(3));
+		String id = rs.getString(1);
+		String login = rs.getString(2);
+		String text = rs.getString(3);
+		Post p = new Post(id, login, getUser(login).getFullName(), text);
+		alist.add(p);
 	    }
 	    rs.close();
 	    stmt.close();
 	    conn.close();
-	    feed = new String[alist.size()];
+	    feed = new Post[alist.size()];
 	    for(int i = 0; i < alist.size(); i++){
 		feed[i] = alist.get(i);
 	    }
+	    json = new Gson().toJson(feed);
+	    return json;
 	}catch(Exception e){
 	    e.printStackTrace();
 	}
-	return feed;
+	return json;
 	
     }
     
@@ -323,6 +337,12 @@ public final class Utility {
 	}catch(Exception e){
 	    e.printStackTrace();
 	}
+    }
+    private String postsToJson(Post[] posts){
+	return new Gson().toJson(posts);
+    }
+    public Post[] jsonToPosts(String json){
+	return new Gson().fromJson(json, Post[].class);
     }
     /**
      * Private default constructor prevents class from being instantiated

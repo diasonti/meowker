@@ -42,23 +42,19 @@ public class PostHandleServlet extends HttpServlet {
 	if("feed".equals(target)){
 	    
 	    String from = request.getParameter("from");
-	    String[] feed = Utility.getNewFeed(user, from);
-	    response.setContentType("text/html;charset=UTF-8");
+	    String feed = Utility.getNewFeed(user, from);
+	    response.setContentType("application/json;charset=UTF-8");
 	    try(PrintWriter out = response.getWriter()){
-		for(String s : feed){
-		    out.println(s);
-		}
+		out.print(feed);
 	    }
 	    
 	}else if("own".equals(target)){
 	    String login = request.getParameter("login");
 	    String from = request.getParameter("from");
-	    String[] posts = Utility.getNewMeows(login, from);
-	    response.setContentType("text/html;charset=UTF-8");
+	    String posts = Utility.getNewMeows(login, from);
+	    response.setContentType("application/json;charset=UTF-8");
 	    try(PrintWriter out = response.getWriter()){
-		for(String s : posts){
-		    out.println(s);
-		}
+		out.print(posts);
 	    }
 	    
 	}
