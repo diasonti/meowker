@@ -25,7 +25,7 @@ public final class Utility {
     
     private static Connection getConnection() throws ClassNotFoundException, SQLException{
 	Class.forName("org.postgresql.Driver");
-	Connection connection = DriverManager.getConnection(DBURL);
+	Connection connection = DriverManager.getConnection(DBURL, DBLOGIN, DBPASSWORD);
 	return connection;
     }
     
@@ -286,7 +286,7 @@ public final class Utility {
     public static String[] getFollows(User user){
 	String[] list = new String[0];
 	try{
-	    Connection conn = DriverManager.getConnection(DBURL);
+	    Connection conn = getConnection();
 	    Statement stmt = conn.createStatement();
 	    String sql = "SELECT follow FROM links WHERE follower='"+user.getLogin()+"'";
 	    ResultSet rs = stmt.executeQuery(sql);
