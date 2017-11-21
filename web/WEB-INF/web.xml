@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <filter>
+        <filter-name>PostFilter</filter-name>
+        <filter-class>filters.PostFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PostFilter</filter-name>
+        <servlet-name>PostHandleServlet</servlet-name>
+    </filter-mapping>
     <servlet>
         <servlet-name>IndexServlet</servlet-name>
         <servlet-class>servlets.IndexServlet</servlet-class>

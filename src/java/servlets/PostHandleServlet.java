@@ -76,7 +76,7 @@ public class PostHandleServlet extends HttpServlet {
 	    return;
 	}
 	Utility.extendSession(response, user);
-	String text = request.getParameter("text");
+	String text = (String)request.getAttribute("text");
 	Utility.postMeow(user, text);
 	response.getWriter().print("0");
     }
