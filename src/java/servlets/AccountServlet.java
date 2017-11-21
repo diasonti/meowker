@@ -92,6 +92,36 @@ public class AccountServlet extends HttpServlet {
 		    }
 		}
 		
+	    }else if(action.equals("follow")){
+		
+		String login = request.getParameter("login");
+		User currentUser = Utility.getSession(request);
+		boolean success = Utility.follow(currentUser.getLogin(), login);
+		try(PrintWriter out = response.getWriter()){
+		    if(success)
+			out.print("true");
+		}
+		
+	    }else if(action.equals("unfollow")){
+		
+		String login = request.getParameter("login");
+		User currentUser = Utility.getSession(request);
+		boolean success = Utility.unfollow(currentUser.getLogin(), login);
+		try(PrintWriter out = response.getWriter()){
+		    if(success)
+			out.print("true");
+		}
+		
+	    }else if(action.equals("followcheck")){
+		
+		String login = request.getParameter("login");
+		User currentUser = Utility.getSession(request);
+		boolean following = Utility.isFollowing(currentUser.getLogin(), login);
+		try(PrintWriter out = response.getWriter()){
+		    if(following)
+			out.print("true");
+		}
+		
 	    }
 	    
 	}

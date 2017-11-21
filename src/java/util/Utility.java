@@ -338,6 +338,50 @@ public final class Utility {
 	    e.printStackTrace();
 	}
     }
+    public static boolean isFollowing(String follower, String follow){
+	boolean following = false;
+	try{
+	    Connection conn = getConnection();
+	    Statement stmt = conn.createStatement();
+	    String sql = "SELECT follower FROM links WHERE follower='"+follower+"' AND follow='"+follow+"'";
+	    ResultSet rs = stmt.executeQuery(sql);
+	    if(rs.next()){
+		following = true;
+	    }
+	    rs.close();
+	    stmt.close();
+	    conn.close();
+	}catch(Exception e){
+	    return false;
+	}
+	return following;
+    }
+    public static boolean follow(String follower, String follow){
+	try{
+	    Connection conn = getConnection();
+	    Statement stmt = conn.createStatement();
+	    String sql = "INSERT INTO links (follower, follow) VALUES ('"+follower+"', '"+follow+"')";
+	    stmt.executeUpdate(sql);
+	    stmt.close();
+	    conn.close();
+	}catch(Exception e){
+	    return false;
+	}
+	return true;
+    }
+    public static boolean unfollow(String follower, String unfollow){
+	try{
+	    Connection conn = getConnection();
+	    Statement stmt = conn.createStatement();
+	    String sql = "DELETE FROM links WHERE follower='"+follower+"' AND follow='"+unfollow+"'";
+	    stmt.executeUpdate(sql);
+	    stmt.close();
+	    conn.close();
+	}catch(Exception e){
+	    return false;
+	}
+	return true;
+    }
     private String postsToJson(Post[] posts){
 	return new Gson().toJson(posts);
     }

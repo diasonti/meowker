@@ -25,6 +25,7 @@
 %>
 <jsp:useBean id="owner" scope="session" class="entities.User" />
 <span id='owner' login='<%= ownerslogin %>' style='display: none'></span>
+<span id='loggedin' login='<%= loggedin.getLogin() %>' style='display: none'></span>
 <nav class="navbar navbar-default">
     <div class="container">
         <div class="navbar-header">
@@ -73,7 +74,7 @@
                     </ul>
                     <ul class="list-group">
                         <li class="list-group-item text-left">
-                            <h5><b>About</b></h5>
+			    <button id="follow" class="btn btn-default followbutton" onclick="return follow()">Follow</button>
                         </li>
                     </ul>
 
@@ -83,7 +84,7 @@
                     <ul class="list-group posts">
                         <span id="refresher"></span>
 			<span class="meow" meow="0" style="display: none"></span>
-			<li class="list-group-item">
+			<li id="nomeows" class="list-group-item">
 			    <div class="list-group-item-text">
 				User did not say meow yet :(
 			    </div>
