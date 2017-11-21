@@ -19,6 +19,7 @@ function sendPost(){
 		},
 		function (data, status) {
 		    if (data) {
+			$("#messagetext").val("");
 			loadFeed();
 		    }
 		});
