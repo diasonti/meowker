@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -12,11 +13,12 @@
 <body>
 <%
     User loggedin = Utility.getSession(request);
-    if (loggedin == null) {
-	response.sendRedirect("../nav");
-    }
-    String ownerslogin = request.getParameter("u");
-    if(loggedin.getLogin().equals(ownerslogin) || ownerslogin == null){
+	if (loggedin == null) {
+%>
+		<c:redirect url="../nav"/>
+<%  }
+	    String ownerslogin = request.getParameter("u");
+	    if (loggedin.getLogin().equals(ownerslogin) || ownerslogin == null){
 	response.sendRedirect("../nav");
     }else{
 	User owner = Utility.getUser(ownerslogin);
