@@ -33,16 +33,13 @@ public class PostFilter implements Filter {
     }    
     
     private static String[] replaceList = {
-	"<script>", ">sсriрt>", // anti js-injection
-	"</script>", ">/sсriрt>", // anti js-injection
+	"<", "&lt;", // anti html-injection
+	">", "&gt;", // anti html-injection
 	"vladimir", "Vladimir", // anti disrespect
 	"danilov", "Danilov", // anti disrespect
-	";", ".", // anti sql-injection
-	"'", "", // anti sql-injection
-	"or", "ор", // anti sql-injection
-	"OR", "ОR", // anti sql-injection
-	"Or", "Оr", // anti sql-injection
-	"oR", "оR" // anti sql-injection
+	"'", "&prime;", // anti sql-injection
+	"=", "&equals;", // anti sql-injection
+	"--", "&ndash;&ndash;", // anti sql-injection
     };
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
