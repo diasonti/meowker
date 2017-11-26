@@ -69,8 +69,8 @@ public class AccountServlet extends HttpServlet {
 	    
 	    if(action.equals("signin")){
 		
-		String login = request.getParameter("login");
-		String password = request.getParameter("password");
+		String login = (String)request.getAttribute("login");
+		String password = (String)request.getAttribute("password");
 		User user = Utility.getUser(login, password);
 		try(PrintWriter out = response.getWriter()){
 		    if(user != null){
@@ -81,9 +81,9 @@ public class AccountServlet extends HttpServlet {
 		
 	    }else if(action.equals("signup")){
 		
-		String fullname = request.getParameter("fullname");
-		String login = request.getParameter("login");
-		String password = request.getParameter("password");
+		String fullname = (String)request.getAttribute("fullname");
+		String login = (String)request.getAttribute("login");
+		String password = (String)request.getAttribute("password");
 		boolean loginUnique = Utility.isLoginUnique(login);
 		try(PrintWriter out = response.getWriter()){
 		    if(loginUnique){

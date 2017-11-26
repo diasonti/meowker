@@ -4,6 +4,14 @@
         <filter-name>PostFilter</filter-name>
         <filter-class>filters.PostFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>LoginFormFilter</filter-name>
+        <filter-class>filters.LoginFormFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginFormFilter</filter-name>
+        <servlet-name>AccountServlet</servlet-name>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>PostFilter</filter-name>
         <servlet-name>PostHandleServlet</servlet-name>
